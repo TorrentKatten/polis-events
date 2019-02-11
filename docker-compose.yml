@@ -7,5 +7,5 @@ services:
      - "5432:5432"
     environment:
      POSTGRES_DB: police_events
-     POSTGRES_USER: police-events
-     POSTGRES_PASSWORD: password
+     POSTGRES_USER: police
+     POSTGRES_PASSWORD: pass
