@@ -1,10 +1,11 @@
 import uuid
-
+import datetime
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
 
 from police_api.api import Api
+from police_events.events import get_events
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://police-events:password@localhost/police_events'
@@ -37,13 +38,17 @@ class Type(db.Model):
 db.create_all()
 
 @app.route('/')
-def hello_world():
+def index():
     events = Api.load_recent_events()
 
     for event in events:
         e = PoliceEvent()
         e.uuid = uuid.uuid4()
-        e.datetime = event.datetime
+
+        if ":" == event.datetime[-3:-2]:
+            event.datetime = event.datetime[:-3] + event.datetime[-2:]  # Korrigera för att python har problem att konvertera alla ISO 8601 datumsträngar (https://stackoverflow.com/a/45300534).
+        e.datetime = datetime.datetime.strptime(event.datetime, "%Y-%m-%d %H:%M:%S %z")
+
         e.summary = event.summary
         e.name = event.name
         e.id = event.id
@@ -77,6 +82,10 @@ def hello_world():
     db.session.commit()
 
     return 'Events written to DB'
+
+@app.route('/events')
+def events():
+    return get_events(db)
 
 if __name__ == '__main__':
 

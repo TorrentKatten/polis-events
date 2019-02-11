@@ -22,14 +22,3 @@ def larmslag_sammanfattning():
     for i,j in sorted(bar.items()):
         print(i,": ",j,"stycken")
 
-
-
-
-
-# test med att konvertera tid
-"""
-datum = "2019-02-09 20:44:22 +01:00"
-if ":" == datum[-3:-2]:
-    datum = datum[:-3] + datum[-2:]   # Korrigera för att python har problem att konvertera alla ISO 8601 datumsträngar (https://stackoverflow.com/a/45300534).
-d = datetime.strptime(datum,"%Y-%m-%d %H:%M:%S %z")
-"""
