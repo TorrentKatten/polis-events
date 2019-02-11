@@ -1,4 +1,4 @@
-Flask-SQLAlchemy
-psycopg2
+flask-sqlalchemy
+psycopg2-binary
 requests
 datetime

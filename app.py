@@ -8,7 +8,9 @@ from police_api.api import Api
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://police-events:password@localhost/police_events'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
 
 
 class PoliceEvent(db.Model):
@@ -32,6 +34,7 @@ class Type(db.Model):
     id = db.Column(UUID(as_uuid=True), primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
 
+db.create_all()
 
 @app.route('/')
 def hello_world():
@@ -70,13 +73,11 @@ def hello_world():
             e.location = l.id
             db.session.add(l)
             db.session.commit()
-
         db.session.add(e)
-
     db.session.commit()
 
     return 'Events written to DB'
 
-
 if __name__ == '__main__':
+
     app.run()
