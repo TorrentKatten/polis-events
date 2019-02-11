@@ -7,8 +7,8 @@ from sqlalchemy.dialects.postgresql import UUID
 from police_api.api import Api
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://police-events:password@localhost/police_events'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://police:pass@localhost/police_events'
 db = SQLAlchemy(app)
 
 
@@ -34,10 +34,12 @@ class Type(db.Model):
     id = db.Column(UUID(as_uuid=True), primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
 
+
 db.create_all()
 
 @app.route('/')
 def hello_world():
+
     events = Api.load_recent_events()
 
     for event in events:
